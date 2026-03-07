@@ -39,66 +39,7 @@ $$\large V = \frac{NOI}{r_f + r_p - g} + U$$
 
 你可以根据自己关注的片区，调整下方参数。看看在理性的财务视角下，这套房产究竟值多少钱。
 
-<div style="margin: 2rem 0; padding: 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-  <h4 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; color: #1e293b;">🏠 价值试算工具</h4>
-
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.875rem;">
-    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-      <label style="color: #475569;">月租金 (元)</label>
-      <input type="number" id="pc-rent" value="4500" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.875rem;">
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-      <label style="color: #475569;">无形价值 U (万元)</label>
-      <input type="number" id="pc-u" value="50" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.875rem;">
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-      <label style="color: #475569;">无风险利率 rf (%)</label>
-      <input type="number" id="pc-rf" value="1.8" step="0.1" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.875rem;">
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-      <label style="color: #475569;">预期增长率 g (%)</label>
-      <input type="number" id="pc-g" value="0" step="0.1" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.875rem;">
-    </div>
-  </div>
-
-  <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; text-align: center;">
-    <span style="color: #64748b; font-style: italic; font-size: 0.875rem;">估算真实价值 (V)</span>
-    <div style="font-size: 1.875rem; font-family: serif; font-weight: bold; color: #2563eb; margin-top: 0.25rem;">
-      <span id="pc-result">178.57</span> <span style="font-size: 1.125rem;">万元</span>
-    </div>
-    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">
-      公式: V = NOI/(rf+rp-g) + U
-    </div>
-  </div>
-</div>
-
-<!-- Calculator Script -->
-<script type="text/javascript">
-(function() {
-  function updateCalc() {
-    var rent = parseFloat(document.getElementById('pc-rent').value) || 0;
-    var uVal = parseFloat(document.getElementById('pc-u').value) || 0;
-    var rf = parseFloat(document.getElementById('pc-rf').value) || 0;
-    var g = parseFloat(document.getElementById('pc-g').value) || 0;
-    var NOI = rent * 12 - 4000;
-    var rfRate = rf / 100;
-    var rpRate = 0.01;
-    var gRate = g / 100;
-    var U = uVal * 10000;
-    var denom = rfRate + rpRate - gRate;
-    var V = denom > 0 ? (NOI / denom) + U : 0;
-    document.getElementById('pc-result').textContent = (V / 10000).toFixed(2);
-  }
-  document.getElementById('pc-rent').addEventListener('input', updateCalc);
-  document.getElementById('pc-u').addEventListener('input', updateCalc);
-  document.getElementById('pc-rf').addEventListener('input', updateCalc);
-  document.getElementById('pc-g').addEventListener('input', updateCalc);
-  updateCalc();
-})();
-</script>
+<PropertyCalculator client:visible />
 
 ---
 

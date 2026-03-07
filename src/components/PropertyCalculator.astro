@@ -1,51 +1,165 @@
-<div class="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl shadow-sm">
-  <h4 class="text-xl font-bold mb-4 text-slate-800">🏠 价值试算工具</h4>
+---
+// 房产价值计算器组件
+---
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-    <div class="flex flex-col gap-2">
-      <label class="text-slate-600">月租金 (元)</label>
-      <input type="number" id="monthlyRent" value="4500" class="p-2 border rounded border-slate-300" />
+<div class="property-calc-container">
+  <h4>🏠 价值试算工具</h4>
+
+  <div class="calc-grid">
+    <div class="calc-field">
+      <label>月租金 (元)</label>
+      <input type="number" id="pc-rent" value="4500" />
     </div>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-slate-600">无形价值 U (万元)</label>
-      <input type="number" id="uValue" value="50" class="p-2 border rounded border-slate-300" />
+    <div class="calc-field">
+      <label>无形价值 U (万元)</label>
+      <input type="number" id="pc-u" value="50" />
     </div>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-slate-600">无风险利率 rf (%)</label>
-      <input type="number" id="rf" value="1.8" step="0.1" class="p-2 border rounded border-slate-300" />
+    <div class="calc-field">
+      <label>无风险利率 rf (%)</label>
+      <input type="number" id="pc-rf" value="1.8" step="0.1" />
     </div>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-slate-600">预期增长率 g (%)</label>
-      <input type="number" id="g" value="0" step="0.1" class="p-2 border rounded border-slate-300" />
+    <div class="calc-field">
+      <label>预期增长率 g (%)</label>
+      <input type="number" id="pc-g" value="0" step="0.1" />
     </div>
   </div>
 
-  <div class="mt-6 pt-4 border-t border-slate-200 text-center">
-    <span class="text-slate-500 italic text-sm">估算真实价值 (V)</span>
-    <div class="text-3xl font-serif font-bold text-blue-600 mt-1">
-      <span id="totalValue">--</span> <span class="text-lg">万元</span>
+  <div class="calc-result">
+    <span class="result-label">估算真实价值 (V)</span>
+    <div class="result-value">
+      <span id="pc-result">178.57</span> <span class="unit">万元</span>
     </div>
+    <div class="result-formula">公式: V = NOI/(rf+rp-g) + U</div>
   </div>
 </div>
 
 <script>
-  const calc = () => {
-    const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
-    const NOI = (getVal('monthlyRent') * 12) - 4000; // 预设扣除4000维护费
-    const rf = getVal('rf') / 100;
-    const rp = 0.01; // 默认 1% 风险溢价
-    const g = getVal('g') / 100;
-    const U = getVal('uValue') * 10000;
+  // 使用 DOMContentLoaded 确保 DOM 就绪
+  if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function() {
+      initCalculator();
+    });
 
-    const denominator = (rf + rp) - g;
-    const V = denominator > 0 ? (NOI / denominator) + U : 0;
+    // 如果 DOM 已经加载完成，立即初始化
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(initCalculator, 1);
+    }
+  }
 
-    document.getElementById('totalValue').innerText = (V / 10000).toFixed(2);
-  };
+  function initCalculator() {
+    const rentInput = document.getElementById('pc-rent');
+    const uInput = document.getElementById('pc-u');
+    const rfInput = document.getElementById('pc-rf');
+    const gInput = document.getElementById('pc-g');
+    const resultEl = document.getElementById('pc-result');
 
-  document.querySelectorAll('input').forEach(el => el.addEventListener('input', calc));
-  calc();
+    if (!rentInput || !resultEl) return;
+
+    function updateCalc() {
+      const rent = parseFloat(rentInput.value) || 0;
+      const uVal = parseFloat(uInput.value) || 0;
+      const rf = parseFloat(rfInput.value) || 0;
+      const g = parseFloat(gInput.value) || 0;
+
+      const NOI = rent * 12 - 4000;
+      const rfRate = rf / 100;
+      const rpRate = 0.01;
+      const gRate = g / 100;
+      const U = uVal * 10000;
+
+      const denom = rfRate + rpRate - gRate;
+      const V = denom > 0 ? (NOI / denom) + U : 0;
+
+      resultEl.textContent = (V / 10000).toFixed(2);
+    }
+
+    rentInput.addEventListener('input', updateCalc);
+    uInput.addEventListener('input', updateCalc);
+    rfInput.addEventListener('input', updateCalc);
+    gInput.addEventListener('input', updateCalc);
+
+    updateCalc();
+  }
 </script>
+
+<style>
+  .property-calc-container {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .property-calc-container h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #1e293b;
+  }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .calc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .calc-field label {
+    color: #475569;
+  }
+
+  .calc-field input {
+    padding: 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .calc-result {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+  }
+
+  .result-label {
+    color: #64748b;
+    font-style: italic;
+    font-size: 0.875rem;
+  }
+
+  .result-value {
+    font-size: 1.875rem;
+    font-family: serif;
+    font-weight: bold;
+    color: #2563eb;
+    margin-top: 0.25rem;
+  }
+
+  .result-value .unit {
+    font-size: 1.125rem;
+  }
+
+  .result-formula {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .calc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
