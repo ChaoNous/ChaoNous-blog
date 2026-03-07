@@ -17,7 +17,9 @@ category: "投资"
 
 我们将房产视为永续债，其真实价值 $V$ 可以通过以下公式推导：
 
+<div style="text-align: center; font-size: 1.75rem; font-weight: bold; margin: 1.5rem 0; padding: 1rem; background: #f1f5f9; border-radius: 0.5rem;">
 $$V = \frac{NOI}{r_f + r_p - g} + U$$
+</div>
 
 ### 变量深度解析
 
