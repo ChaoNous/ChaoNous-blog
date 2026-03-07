@@ -17,7 +17,7 @@ category: "投资"
 
 我们将房产视为永续债，其真实价值 $V$ 可以通过以下公式推导：
 
-$$V = \\frac{NOI}{r_f + r_p - g} + U$$
+$$V = \frac{NOI}{r_f + r_p - g} + U$$
 
 ### 变量深度解析
 
@@ -25,7 +25,7 @@ $$V = \\frac{NOI}{r_f + r_p - g} + U$$
 
     > 它是"纯利"。计算时需用【年租金】减去【空置期成本】、【中介费】及【长期维护损耗】。
 
-* **$r_f$ (Risk-free Rate)**：**无风险利率**。通常参考 [中国10年期国债收益率](https://www.bilibili.com/opus/1173671586857746448?spm_id_from=333.1387.0.0)，目前约为 **1.8%**。
+* **$r_f$ (Risk-free Rate)**：**无风险利率**。通常参考 [中国10年期国债收益率](https://www.nfra.gov.cn/cn/view/pages/index/guozhai.html)，目前约为 **1.8%**。
 
 * **$r_p$ (Risk Premium)**：**风险溢价**。房产变现周期长、摩擦成本高，这部分是由于流动性缺失带来的补偿。
 
@@ -72,23 +72,27 @@ $$V = \\frac{NOI}{r_f + r_p - g} + U$$
   </div>
 </div>
 
-<script>
-  const calc = () => {
-    const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
-    const NOI = (getVal('monthlyRent') * 12) - 4000;
-    const rf = getVal('rf') / 100;
-    const rp = 0.01;
-    const g = getVal('g') / 100;
-    const U = getVal('uValue') * 10000;
+<script is:inline>
+  (function() {
+    const calc = function() {
+      const getVal = function(id) { return parseFloat(document.getElementById(id).value) || 0; };
+      const NOI = (getVal('monthlyRent') * 12) - 4000;
+      const rf = getVal('rf') / 100;
+      const rp = 0.01;
+      const g = getVal('g') / 100;
+      const U = getVal('uValue') * 10000;
 
-    const denominator = (rf + rp) - g;
-    const V = denominator > 0 ? (NOI / denominator) + U : 0;
+      const denominator = (rf + rp) - g;
+      const V = denominator > 0 ? (NOI / denominator) + U : 0;
 
-    document.getElementById('totalValue').innerText = (V / 10000).toFixed(2);
-  };
+      document.getElementById('totalValue').innerText = (V / 10000).toFixed(2);
+    };
 
-  document.querySelectorAll('input').forEach(el => el.addEventListener('input', calc));
-  calc();
+    document.querySelectorAll('#monthlyRent, #uValue, #rf, #g').forEach(function(el) {
+      el.addEventListener('input', calc);
+    });
+    calc();
+  })();
 </script>
 
 ---
@@ -107,7 +111,7 @@ $$V = \\frac{NOI}{r_f + r_p - g} + U$$
 
 **计算过程：**
 
-$$V = \\frac{50,000}{0.018 + 0.010 - 0} + 500,000 \\approx 228.57 \\text{ 万元}$$
+$$V = \frac{50{,}000}{0.018 + 0.010 - 0} + 500{,}000 \approx 228.57\text{ 万元}$$
 
 **结论：** 如果该房产的市场成交价远高于 **228.57 万元**，说明买家正在为"超额预期"或者"更高的无形价值"支付溢价。在 $g$（增长率）下行的周期，这种溢价往往是风险的来源。
 
