@@ -219,11 +219,11 @@ export const siteConfig: SiteConfig = {
 			enableCompress: true, // 启用字体子集优化，减少字体文件大小
 		},
 		cjkFont: {
-			// 中日韩字体 - 作为回退字体
-			fontFamily: "萝莉体 第二版",
-			fontWeight: "500",
-			localFonts: ["萝莉体 第二版.ttf"],
-			enableCompress: true, // 启用字体子集优化，减少字体文件大小
+			// 中日韩字体 - 使用系统明朝体
+			fontFamily: "Mincho, MS Mincho, SimSun, Noto Serif CJK SC, Source Han Serif SC, serif",
+			fontWeight: "400",
+			localFonts: [], // 使用系统自带字体
+			enableCompress: false,
 		},
 	},
 	showLastModified: true, // 控制“上次编辑”卡片显示的开关
