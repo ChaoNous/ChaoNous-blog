@@ -38,8 +38,8 @@ let links: NavBarLink[] = navBarConfig.links.map(
 const rawLogo = siteConfig.navbarTitle?.logo || "/assets/home/default-logo.png";
 const logoSrc = rawLogo.match(/^(http|https|\/\/)/) ? rawLogo : url(rawLogo);
 
-const rawIcon = siteConfig.navbarTitle?.icon || "/assets/home/home.png";
-const iconSrc = rawIcon.match(/^(http|https|\/\/)/) ? rawIcon : url(rawIcon);
+const rawIcon = siteConfig.navbarTitle?.icon || "";
+const iconSrc = rawIcon ? (rawIcon.match(/^(http|https|\/\/)/) ? rawIcon : url(rawIcon)) : "";
 
 const rawTextImage = siteConfig.navbarTitle?.textImage || "";
 const textImageSrc = rawTextImage.match(/^(http|https|\/\/)/) ? rawTextImage : (rawTextImage ? url(rawTextImage) : "");
@@ -47,26 +47,26 @@ const textImageSrc = rawTextImage.match(/^(http|https|\/\/)/) ? rawTextImage : (
 <div id="navbar" class="z-50 onload-animation group" data-transparent-mode={navbarTransparentMode} data-is-home={isHomePage}>
     <div class="absolute h-8 left-0 right-0 -top-8 bg-(--card-bg) transition"></div> <!-- used for onload animation -->
     <div class:list={[className, "overflow-visible! max-w-(--page-width) h-18 mx-auto flex items-center justify-between px-4"]}>
-        <a href={url('/')} class="btn-plain scale-animation rounded-lg h-10 md:h-13 md:in-[.enable-banner]:h-10 md:in-[.enable-banner]:group-[.scrolled]:h-13 px-5 font-bold active:scale-95 shrink-0 transition-all duration-300">
-            <div class="flex flex-row items-center text-md">
+        <a href={url('/')} class="navbar-brand scale-animation h-10 md:h-13 md:in-[.enable-banner]:h-10 md:in-[.enable-banner]:group-[.scrolled]:h-13 shrink-0 transition-all duration-300" aria-label={siteConfig.navbarTitle?.text || siteConfig.title}>
+            <div class="navbar-brand-inner">
 				{/* 使用navbarTitle配置或默认配置 */}
                 {siteConfig.navbarTitle ? (
                     siteConfig.navbarTitle.mode === "logo" ? (
                         <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-10 md:h-13 md:in-[.enable-banner]:h-10 md:in-[.enable-banner]:group-[.scrolled]:h-13 max-w-full object-contain transition-all duration-300" loading="lazy" />
                     ) : (
                         <>
-                            <img src={iconSrc} alt={siteConfig.navbarTitle.text} class="h-7 w-7 mr-2 object-contain" loading="lazy" />
+                            {iconSrc && <img src={iconSrc} alt="" class="navbar-brand-icon" loading="lazy" aria-hidden="true" />}
                             {textImageSrc ? (
-                                <img src={textImageSrc} alt={siteConfig.navbarTitle.text} class="h-7 object-contain" loading="lazy" />
+                                <img src={textImageSrc} alt={siteConfig.navbarTitle.text} class="h-8 object-contain" loading="lazy" />
                             ) : (
-                                <span>{siteConfig.navbarTitle.text}</span>
+                                <span class="navbar-brand-text">{siteConfig.navbarTitle.text}</span>
                             )}
                         </>
                     )
                 ) : (
                     <>
                         <Icon name="material-symbols:home-pin-outline" class="text-[1.75rem] mr-2" />
-                        <span>{siteConfig.title}</span>
+                        <span class="navbar-brand-text">{siteConfig.title}</span>
                     </>
                 )}
             </div>
@@ -299,3 +299,56 @@ if (document.readyState === 'loading') {
     loadPagefind();
 }
 </script>}
+
+<style>
+	.navbar-brand {
+		display: inline-flex;
+		align-items: center;
+		padding: 0 0.25rem;
+		color: rgb(17 24 39 / 0.96);
+		text-decoration: none;
+		background: transparent;
+		border: 0;
+		box-shadow: none;
+	}
+
+	.navbar-brand:hover,
+	.navbar-brand:focus-visible,
+	.navbar-brand:active {
+		color: var(--primary);
+		background: transparent;
+		box-shadow: none;
+		outline: none;
+	}
+
+	:root.dark .navbar-brand {
+		color: rgb(255 255 255 / 0.96);
+	}
+
+	.navbar-brand-inner {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.65rem;
+	}
+
+	.navbar-brand-icon {
+		width: 1.6rem;
+		height: 1.6rem;
+		object-fit: contain;
+		flex-shrink: 0;
+	}
+
+	.navbar-brand-text {
+		font-size: clamp(1.45rem, 1.1rem + 0.8vw, 1.9rem);
+		font-weight: 700;
+		line-height: 1;
+		letter-spacing: 0.01em;
+		text-shadow: none;
+	}
+
+	@media (max-width: 640px) {
+		.navbar-brand-text {
+			font-size: 1.3rem;
+		}
+	}
+</style>
