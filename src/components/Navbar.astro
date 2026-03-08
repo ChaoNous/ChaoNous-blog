@@ -60,7 +60,11 @@ const textImageSrc = rawTextImage.match(/^(http|https|\/\/)/) ? rawTextImage : (
                             {textImageSrc ? (
                                 <img src={textImageSrc} alt={siteConfig.navbarTitle.text} class="h-8 object-contain" loading="lazy" />
                             ) : (
-                                <span class="navbar-brand-text">{siteConfig.navbarTitle.text}</span>
+                                <span class="navbar-brand-text flex items-center">
+                                    <span class="text-[var(--primary)] mr-1.5 font-normal select-none opacity-80" aria-hidden="true">$&gt;</span>
+                                    {siteConfig.navbarTitle.text}
+                                    <span class="animate-pulse text-[var(--primary)] ml-1 opacity-80 select-none" aria-hidden="true">_</span>
+                                </span>
                             )}
                         </>
                     )
