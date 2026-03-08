@@ -13,7 +13,16 @@ const {
 			<p class="valuation-lab__description">{description}</p>
 		</div>
 		<div class="valuation-lab__formula">
-			<span>V = NOI / (r_f + r_p - g) + U</span>
+			<div class="valuation-formula" aria-label="V equals NOI over r_f plus r_p minus g, plus U">
+				<span class="valuation-formula__symbol">V</span>
+				<span class="valuation-formula__symbol">=</span>
+				<span class="valuation-formula__fraction">
+					<span class="valuation-formula__numerator">NOI</span>
+					<span class="valuation-formula__denominator">r_f + r_p - g</span>
+				</span>
+				<span class="valuation-formula__symbol">+</span>
+				<span class="valuation-formula__symbol">U</span>
+			</div>
 		</div>
 	</div>
 
@@ -29,14 +38,6 @@ const {
 					</div>
 				</label>
 
-				<label class="valuation-field">
-					<span>空置与折损</span>
-					<div class="valuation-field__control">
-						<input id="pc-vacancy" type="number" min="0" max="30" step="0.5" value="5" />
-						<em>%</em>
-					</div>
-				</label>
-
 				<label class="valuation-field valuation-field--wide">
 					<span>年度运营成本</span>
 					<div class="valuation-field__control">
@@ -49,7 +50,7 @@ const {
 		</div>
 
 		<div class="valuation-lab__panel">
-			<h5>定价参数</h5>
+			<h5>估值参数</h5>
 			<div class="valuation-lab__grid">
 				<label class="valuation-field">
 					<span>无风险利率 r_f</span>
@@ -82,17 +83,19 @@ const {
 						<em>万元</em>
 					</div>
 				</label>
-
-				<label class="valuation-field valuation-field--wide">
-					<span>挂牌价</span>
-					<div class="valuation-field__control">
-						<input id="pc-price" type="number" min="0" step="1" value="300" />
-						<em>万元</em>
-					</div>
-					<small>输入你正在看的成交价或挂牌价，直接比较是折价还是溢价。</small>
-				</label>
 			</div>
 		</div>
+	</div>
+
+	<div class="valuation-lab__compare">
+		<label class="valuation-field valuation-field--wide">
+			<span>市场对照价格</span>
+			<div class="valuation-field__control">
+				<input id="pc-price" type="number" min="0" step="1" value="300" />
+				<em>万元</em>
+			</div>
+			<small>输入你正在看的成交价或挂牌价，直接比较当前定价是折价还是溢价。</small>
+		</label>
 	</div>
 
 	<div class="valuation-lab__metrics">
@@ -103,9 +106,9 @@ const {
 		</article>
 
 		<article class="metric-card">
-			<span class="metric-card__label">年 NOI</span>
+			<span class="metric-card__label">NOI</span>
 			<strong class="metric-card__value"><span id="pc-noi">5.13</span> 万元</strong>
-			<p class="metric-card__hint">年租金扣除空置与运营成本后的净经营收入。</p>
+			<p class="metric-card__hint">年租金扣除运营成本后的净经营收入。</p>
 		</article>
 
 		<article class="metric-card">
@@ -139,7 +142,6 @@ const {
 		const initPropertyCalculator = () => {
 			const ids = [
 				"pc-rent",
-				"pc-vacancy",
 				"pc-cost",
 				"pc-rf",
 				"pc-rp",
@@ -190,7 +192,6 @@ const {
 
 			const update = () => {
 				const monthlyRent = read("pc-rent");
-				const vacancyRate = read("pc-vacancy") / 100;
 				const annualCost = read("pc-cost");
 				const rf = read("pc-rf") / 100;
 				const rp = read("pc-rp") / 100;
@@ -200,8 +201,7 @@ const {
 				const askingPrice = askingPriceWan * 10000;
 
 				const annualRent = monthlyRent * 12;
-				const effectiveRent = annualRent * (1 - vacancyRate);
-				const noi = Math.max(effectiveRent - annualCost, 0);
+				const noi = Math.max(annualRent - annualCost, 0);
 				const discountRate = rf + rp - g;
 
 				const invalidModel = discountRate <= 0;
@@ -315,10 +315,45 @@ const {
 		white-space: nowrap;
 	}
 
+	.valuation-formula {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+	}
+
+	.valuation-formula__symbol {
+		font-size: 1.05rem;
+	}
+
+	.valuation-formula__fraction {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		line-height: 1.1;
+	}
+
+	.valuation-formula__numerator {
+		padding: 0 0.55rem 0.2rem;
+		border-bottom: 1.5px solid currentColor;
+	}
+
+	.valuation-formula__denominator {
+		padding-top: 0.18rem;
+		font-size: 0.88rem;
+	}
+
 	.valuation-lab__layout {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 1rem;
+	}
+
+	.valuation-lab__compare {
+		margin-top: 1rem;
+		padding: 1rem;
+		border-radius: 1rem;
+		background: color-mix(in oklab, var(--primary) 4%, var(--card-bg));
+		border: 1px solid color-mix(in oklab, var(--primary) 8%, var(--line-divider));
 	}
 
 	.valuation-lab__panel {
