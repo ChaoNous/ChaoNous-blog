@@ -5,6 +5,7 @@ image: "./guide/cover.webp"
 description: 关于"人机感"、实用主义与情绪价值的深夜碎碎念。
 tags: [随笔, 思考, 生活]
 category: 随笔
+pinned: true
 ---
 
 我在与女生聊天的时候，通常出现如下场景：
