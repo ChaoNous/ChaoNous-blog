@@ -357,9 +357,9 @@ export const profileConfig: ProfileConfig = {
 			url: "https://github.com/ChaoNous",
 		},
 		{
-			name: "X",
-			icon: "simple-icons:x",
-			url: "https://x.com/ChaoNous_",
+			name: "Steam",
+			icon: "simple-icons:steam",
+			url: "https://steamcommunity.com/id/ChaoNous/",
 		},
 		{
 			name: "Discord",
