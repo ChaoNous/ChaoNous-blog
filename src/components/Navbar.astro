@@ -60,7 +60,7 @@ const textImageSrc = rawTextImage.match(/^(http|https|\/\/)/) ? rawTextImage : (
                             {textImageSrc ? (
                                 <img src={textImageSrc} alt={siteConfig.navbarTitle.text} class="h-8 object-contain" loading="lazy" />
                             ) : (
-                                <span class="navbar-brand-text cyber-glitch font-bold tracking-tight" data-text={siteConfig.navbarTitle.text}>
+                                <span class="navbar-brand-text kawaii-bounce font-bold tracking-wide" data-text={siteConfig.navbarTitle.text}>
                                     {siteConfig.navbarTitle.text}
                                 </span>
                             )}
@@ -430,29 +430,30 @@ if (document.readyState === 'loading') {
 		text-transform: uppercase;
 	}
 
-	.cyber-glitch {
+	.kawaii-bounce {
 		position: relative;
-		/* 极客风：默认静态下的轻微红蓝通道分离（色散） */
-		text-shadow: 2px 0 0 rgba(0, 255, 255, 0.4), -2px 0 0 rgba(255, 0, 255, 0.4);
-		transition: text-shadow 0.3s ease;
+		color: white; /* 内部填充纯白 */
+		/* 二次元元气描边与底部投影（利用主题色作为描边） */
+		text-shadow: 
+			-2px -2px 0 var(--primary),  
+			 2px -2px 0 var(--primary),
+			-2px  2px 0 var(--primary),
+			 2px  2px 0 var(--primary),
+			 0px  4px 8px color-mix(in srgb, var(--primary) 60%, transparent);
+		transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), text-shadow 0.3s ease;
 		display: inline-block;
 	}
 
-	.cyber-glitch:hover,
-	.navbar-brand:hover .cyber-glitch {
-		/* 悬停时的超载高亮色散 */
-		text-shadow: 4px 0 0 rgba(0, 255, 255, 0.9), -4px 0 0 rgba(255, 0, 255, 0.9);
-		/* 故障抖动动画 */
-		animation: cyber-jitter 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite both;
-	}
-
-	@keyframes cyber-jitter {
-		0% { transform: translate(0); }
-		20% { transform: translate(-2px, 1px); }
-		40% { transform: translate(-1px, -1px); }
-		60% { transform: translate(2px, 1px); }
-		80% { transform: translate(1px, -1px); }
-		100% { transform: translate(0); }
+	.kawaii-bounce:hover,
+	.navbar-brand:hover .kawaii-bounce {
+		/* 悬停时的超软Q弹回弹效果放大并轻微旋转 */
+		transform: scale(1.1) rotate(-3deg);
+		text-shadow: 
+			-2px -2px 0 var(--primary),  
+			 2px -2px 0 var(--primary),
+			-2px  2px 0 var(--primary),
+			 2px  2px 0 var(--primary),
+			 0px  8px 16px color-mix(in srgb, var(--primary) 80%, transparent);
 	}
 
 	@media (max-width: 640px) {
