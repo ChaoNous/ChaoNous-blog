@@ -47,23 +47,17 @@ function formatTime(dateString: string): string {
     import('../scripts/right-sidebar-layout.js');
   </script>
 	<div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
-		<div class="card-base z-10 px-4 py-4 md:px-6 md:py-5 relative w-full">
+		<div class="card-base z-10 px-9 py-6 relative w-full">
 		<div class="relative max-w-4xl w-full px-2 md:px-0">
 				<!-- 页面头部 -->
-				<div class="moments-header mb-6">
-					<div class="header-content">
-						<div class="header-info">
-							<h1 class="moments-title text-xl md:text-2xl lg:text-3xl font-bold text-90 mb-1">{i18n(I18nKey.diary)}</h1>
-							<p class="moments-subtitle text-sm md:text-base lg:text-lg text-75">{i18n(I18nKey.diarySubtitle)}</p>
-						</div>
-						<div class="header-stats">
-							<div class="stat-item text-center">
-								<span class="stat-number text-lg md:text-xl lg:text-2xl font-bold text-(--primary)">{diaryStats.total}</span>
-								<span class="stat-label text-xs md:text-sm lg:text-base text-75">{i18n(I18nKey.diaryCount)}</span>
-							</div>
-						</div>
-					</div>
-				</div>
+			<header class="mb-6">
+				<h1 class="text-3xl font-bold text-90 mb-3 relative
+							before:w-1 before:h-8 before:rounded-md before:bg-(--primary)
+							before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4">
+					{i18n(I18nKey.diary)}
+				</h1>
+				<p class="text-75">{i18n(I18nKey.diarySubtitle)}</p>
+			</header>
 
 				<!-- 短文列表 -->
 				<div class="moments-timeline">
@@ -123,40 +117,6 @@ function formatTime(dateString: string): string {
 		transition: all 0.3s ease;
 	}
 	
-	.moments-header {
-		padding: 1rem;
-		border-radius: 8px;
-		background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark, var(--primary)) 100%);
-		color: white;
-		position: relative;
-		overflow: hidden;
-	}
-	
-	.header-content {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		position: relative;
-		z-index: 1;
-	}
-	
-	.moments-title {
-		color: white;
-		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-	}
-	
-	.moments-subtitle {
-		color: rgba(255, 255, 255, 0.9);
-	}
-	
-	.stat-number {
-		color: white;
-	}
-	
-	.stat-label {
-		color: rgba(255, 255, 255, 0.8);
-	}
-	
 	.image-item img {
 		transition: transform 0.3s ease;
 	}
@@ -179,16 +139,6 @@ function formatTime(dateString: string): string {
 	/* 响应式设计 */
 	/* 手机端 (小于768px) */
 	@media (max-width: 768px) {
-		.moments-header {
-			padding: 0.75rem;
-		}
-		
-		.header-content {
-			flex-direction: column;
-			text-align: center;
-			gap: 0.75rem;
-		}
-		
 		.diary-images {
 			grid-template-columns: repeat(2, 1fr);
 		}
@@ -202,16 +152,6 @@ function formatTime(dateString: string): string {
 	
 	/* 平板竖屏 (769px - 1280px) - 优化显示 */
 	@media (min-width: 769px) and (max-width: 1280px) {
-		.moments-header {
-			padding: 1.25rem;
-		}
-		
-		.header-content {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-		
 		.moment-item {
 			padding: 1.5rem;
 		}
@@ -234,10 +174,6 @@ function formatTime(dateString: string): string {
 	
 	/* 平板横屏和桌面端 (大于1280px) */
 	@media (min-width: 1281px) {
-		.moments-header {
-			padding: 1.5rem;
-		}
-		
 		.moment-item {
 			padding: 2rem;
 		}
@@ -256,13 +192,6 @@ function formatTime(dateString: string): string {
 	
 	/* 优化小屏幕显示 */
 	@media (max-width: 480px) {
-		.moment-item {
-			border-radius: 8px;
-		}
-		
-		.moments-header {
-			border-radius: 6px;
-		}
 	}
 </style>
 
