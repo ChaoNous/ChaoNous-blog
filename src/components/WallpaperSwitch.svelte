@@ -60,10 +60,9 @@
     }
 </style>
 
-<div class="relative z-50" role="menu" tabindex="-1">
+<div class="relative z-50">
     <button
         aria-label="Wallpaper Mode"
-        role="menuitem"
         class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 theme-switch-btn"
         id="wallpaper-mode-switch"
         onclick={togglePanel}
