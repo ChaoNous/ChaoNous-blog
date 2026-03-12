@@ -357,8 +357,9 @@ function hideError() {
 
 function setProgress(event: MouseEvent) {
 	if (!audio || !progressBar) return;
+	// 如果由于某种原因 rect 没被初始化或需要更新，可以在交互开始时读取
 	const rect = progressBar.getBoundingClientRect();
-	const percent = (event.clientX - rect.left) / rect.width;
+	const percent = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
 	const newTime = percent * duration;
 	audio.currentTime = newTime;
 	currentTime = newTime;

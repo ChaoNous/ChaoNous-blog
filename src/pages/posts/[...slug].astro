@@ -287,6 +287,8 @@ const jsonLd = {
                             src={entry.data.image}
                             basePath={getFileDirFromPath(entry.filePath || '')}
                             class="mb-8 rounded-xl banner-container onload-animation"
+                            loading="eager"
+                            fetchPriority="high"
                         />
                     </>
                 )

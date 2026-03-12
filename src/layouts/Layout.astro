@@ -248,6 +248,13 @@ bodyFontFamily = geekBodyFontFamily;
 			}
 		</script>
 
+		<link rel="preconnect" href="https://i0.hdslb.com" />
+		<link rel="dns-prefetch" href="https://i0.hdslb.com" />
+		<link rel="preconnect" href="https://www.googletagmanager.com" />
+		<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+		<link rel="preconnect" href="https://www.clarity.ms" />
+		<link rel="dns-prefetch" href="https://www.clarity.ms" />
+
 		<title>{pageTitle}</title>
 		<meta charset="UTF-8" />
 		<meta name="description" content={description || pageTitle} />
@@ -366,12 +373,16 @@ bodyFontFamily = geekBodyFontFamily;
 							document.documentElement.style.fontSize = "";
 							return;
 						}
-						const targetWidth = pageScaling.targetWidth || 2000;
-						const currentWidth = document.documentElement.clientWidth;
-						let scale = currentWidth / targetWidth;
-						if (scale > 1) scale = 1;
-						if (scale < 0.85) scale = 0.85;
-						document.documentElement.style.fontSize = `${scale * 100}%`;
+						
+						// 使用 requestAnimationFrame 避免强制重排
+						requestAnimationFrame(() => {
+							const targetWidth = pageScaling.targetWidth || 2000;
+							const currentWidth = document.documentElement.clientWidth;
+							let scale = currentWidth / targetWidth;
+							if (scale > 1) scale = 1;
+							if (scale < 0.85) scale = 0.85;
+							document.documentElement.style.fontSize = `${scale * 100}%`;
+						});
 					}
 
 					// 立即执行一次
