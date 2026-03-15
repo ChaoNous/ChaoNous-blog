@@ -60,6 +60,7 @@ export type SiteConfig = {
 	// 特色页面开关配置
 	featurePages: {
 		anime: boolean; // 番剧页面开关
+		movie: boolean; // 电影页面开关
 		diary: boolean; // 日记页面开关
 		friends: boolean; // 友链页面开关
 		projects: boolean; // 项目页面开关

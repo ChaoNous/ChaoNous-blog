@@ -58,6 +58,7 @@ export const en: Translation = {
 	[Key.publishedAt]: "Published at",
 	[Key.license]: "License",
 	[Key.anime]: "Anime",
+	[Key.movie]: "Movies",
 	[Key.diary]: "Game",
 
 	// Anime Page
@@ -82,6 +83,13 @@ export const en: Translation = {
 		"Please set your Bilibili vmid in the src/config.ts file",
 	[Key.animeConfigBangumi]:
 		"Please set your Bangumi userId in the src/config.ts file",
+
+	// Movie Page
+	[Key.movieTitle]: "My Movie List",
+	[Key.movieSubtitle]: "Record my movie journey",
+	[Key.movieEmpty]: "No movie data available",
+	[Key.movieEmptyLocal]:
+		"Please add movie information in src/data/movie.ts file",
 
 	// Game Page
 	[Key.diarySubtitle]: "Record my gaming world",

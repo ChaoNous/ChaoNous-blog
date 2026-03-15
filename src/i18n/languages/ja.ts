@@ -58,6 +58,7 @@ export const ja: Translation = {
 	[Key.publishedAt]: "公開日",
 	[Key.license]: "ライセンス",
 	[Key.anime]: "視聴したアニメ",
+	[Key.movie]: "映画",
 	[Key.diary]: "日記",
 
 	// アニメページ
@@ -82,6 +83,12 @@ export const ja: Translation = {
 		"src/config.tsファイルでBilibili vmidを設定してください",
 	[Key.animeConfigBangumi]:
 		"src/config.tsファイルでBangumi userIdを設定してください",
+
+	// 映画ページ
+	[Key.movieTitle]: "視聴した映画",
+	[Key.movieSubtitle]: "映画の旅の記録です",
+	[Key.movieEmpty]: "映画のデータはありません",
+	[Key.movieEmptyLocal]: "src/data/movie.tsに映画情報を追加してください",
 
 	// 日記ページ
 	[Key.diarySubtitle]: "いつでも、どこでも生活を共有",
