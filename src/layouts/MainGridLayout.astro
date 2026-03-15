@@ -512,23 +512,31 @@ const transparentClass = shouldEnableTransparency
 					
 					// 关键：同时更新文章列表容器的CSS类
 					const postListContainer = document.getElementById('post-list-container');
-				if (postListContainer) {
-					postListContainer.classList.remove('list-mode', 'grid-mode');
-					
-					if (currentLayout === 'grid') {
-						postListContainer.classList.add('grid-mode');
-						postListContainer.classList.add('grid', 'grid-cols-1', 'lg:grid-cols-2', 'gap-6');
-						postListContainer.classList.remove('flex', 'flex-col');
-					} else {
-						postListContainer.classList.add('list-mode');
-						postListContainer.classList.add('flex', 'flex-col');
-						postListContainer.classList.remove('grid', 'grid-cols-1', 'lg:grid-cols-2', 'gap-6');
+					if (postListContainer) {
+						postListContainer.classList.remove('list-mode', 'grid-mode');
+						
+						if (currentLayout === 'grid') {
+							postListContainer.classList.add('grid-mode');
+							postListContainer.classList.add('grid', 'grid-cols-1', 'lg:grid-cols-2', 'gap-6');
+							postListContainer.classList.remove('flex', 'flex-col');
+						} else {
+							postListContainer.classList.add('list-mode');
+							postListContainer.classList.add('flex', 'flex-col');
+							postListContainer.classList.remove('grid', 'grid-cols-1', 'lg:grid-cols-2', 'gap-6');
+						}
 					}
+					
+					// 清除临时状态
+					// @ts-ignore
+					delete window.__pendingLayoutMode;
 				}
-			}
-		});
-	})();
-	
+			});
+			
+			return true;
+		}
+		return false;
+	}
+			
 	// 根据壁纸模式动态设置 banner 和全屏壁纸的显示
 	// const wallpaperMode = localStorage.getItem('wallpaperMode') || defaultWallpaperMode;
 	

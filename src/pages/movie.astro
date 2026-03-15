@@ -38,6 +38,12 @@ interface AnimeItem {
 	genre: string[];
 }
 
+type AnimeMode = "local" | "bilibili" | "bangumi";
+
+function getMovieMode(): AnimeMode {
+	return "local";
+}
+
 type AnimeSourceConfig =
 	| { type: "local"; data: AnimeItem[] }
 	| {
@@ -59,7 +65,7 @@ const hasRightSidebars =
 
 const BANGUMI_USER_ID = siteConfig.bangumi?.userId || "your-user-id";
 const BILIBILI_VMID = siteConfig.bilibili?.vmid || "";
-const ANIME_MODE = "local";
+const ANIME_MODE = getMovieMode();
 
 const sourceConfigs: Record<string, AnimeSourceConfig> = {
 	local: {

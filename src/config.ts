@@ -275,7 +275,7 @@ export const navBarConfig: NavBarConfig = {
 				{
 					name: "Movie",
 					url: "/movie/",
-					icon: "material-symbols:local-movies",
+					icon: "material-symbols:movie",
 				},
 				{
 					name: "游戏",
