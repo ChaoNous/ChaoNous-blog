@@ -44,7 +44,7 @@ repository: your-username/Mizuki  # 改为你的
 
 ### Step 4: 更新代码仓库工作流
 
-编辑**代码仓库**的 `.github/workflows/deploy.yml`
+编辑**代码仓库**中新建的工作流文件,例如 `.github/workflows/content-sync.yml`
 
 在 `on:` 部分添加:
 
@@ -98,7 +98,7 @@ git push
 ### 代码仓库未触发
 
 **检查**:
-- [ ] `.github/workflows/deploy.yml` 包含 `repository_dispatch`
+- [ ] 新建的 GitHub Actions 工作流包含 `repository_dispatch`
 - [ ] Event type 为 `content-updated`
 - [ ] 代码仓库 Actions 已启用
 

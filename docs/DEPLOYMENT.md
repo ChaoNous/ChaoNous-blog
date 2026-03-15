@@ -5,7 +5,6 @@
 ## 📖 目录
 
 - [部署前准备](#-部署前准备)
-- [GitHub Pages 部署](#-github-pages-部署)
 - [Vercel 部署](#-vercel-部署)
 - [Netlify 部署](#-netlify-部署)
 - [Cloudflare Pages 部署](#-cloudflare-pages-部署)
@@ -40,83 +39,15 @@ export default defineConfig({
 
 ## 📦 GitHub Pages 部署
 
-### 自动部署 (推荐)
+此仓库已不再使用 GitHub Pages，也不再维护 `pages` 分支发布链路。
 
-项目已配置好 GitHub Actions 工作流，推送到 `main` 分支会自动部署。
+当前推荐且实际使用的部署方式是 [Cloudflare Pages 部署](#-cloudflare-pages-部署)：
 
-#### 本地模式 (默认)
+1. 代码推送到 GitHub 的 `master` 分支
+2. Cloudflare Pages 直接从仓库拉取并构建
+3. 构建输出目录保持为 `dist`
 
-**无需任何配置**，开箱即用：
-
-1. 推送代码到 GitHub
-2. 在仓库设置中启用 GitHub Pages
-   - Settings → Pages
-   - Source: Deploy from a branch
-   - Branch: `pages` / `root`
-3. 等待 Actions 完成部署
-
-#### 内容分离模式
-
-**配置步骤**:
-
-1. **添加仓库 Secrets**:
-   - Settings → Secrets and variables → Actions → New repository secret
-   - 添加 `CONTENT_REPO_URL`: `https://github.com/your-username/Mizuki-Content.git`
-
-2. **修改 `.github/workflows/deploy.yml`**:
-
-取消注释环境变量部分:
-```yaml
-- name: Build site
-  run: pnpm run build
-  env:
-    ENABLE_CONTENT_SYNC: true
-    CONTENT_REPO_URL: ${{ secrets.CONTENT_REPO_URL }}
-    USE_SUBMODULE: true
-```
-
-3. **私有内容仓库配置**:
-
-**同账号私有仓库** (推荐):
-- 无需额外配置
-- 自动使用 `GITHUB_TOKEN` 访问
-
-**跨账号私有仓库 (SSH)**:
-```yaml
-# 添加 SSH 配置步骤
-- name: Setup SSH Key
-  uses: webfactory/ssh-agent@v0.8.0
-  with:
-    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-- name: Checkout
-  uses: actions/checkout@v4
-  with:
-    submodules: true
-```
-
-在 Secrets 中添加:
-- `SSH_PRIVATE_KEY`: SSH 私钥内容
-- `CONTENT_REPO_URL`: `git@github.com:other-user/repo.git`
-
-**跨账号私有仓库 (Token)**:
-```yaml
-- name: Checkout
-  uses: actions/checkout@v4
-  with:
-    submodules: true
-    token: ${{ secrets.PAT_TOKEN }}
-
-- name: Build site
-  run: pnpm run build
-  env:
-    ENABLE_CONTENT_SYNC: true
-    CONTENT_REPO_URL: https://${{ secrets.PAT_TOKEN }}@github.com/other-user/repo.git
-    USE_SUBMODULE: true
-```
-
-在 Secrets 中添加:
-- `PAT_TOKEN`: GitHub Personal Access Token (需要 `repo` 权限)
+如果你看到旧文档或历史提交中提到 `.github/workflows/deploy.yml` 或 `pages` 分支，那是已经移除的历史方案。
 
 ### 工作流说明
 
@@ -125,7 +56,6 @@ export default defineConfig({
 | 工作流 | 触发条件 | 功能 |
 |--------|---------|------|
 | `build.yml` | Push/PR 到 main | CI 测试，检查构建 |
-| `deploy.yml` | Push 到 main | 构建并部署到 pages 分支 |
 | `format.yml` | Push/PR | 代码格式和质量检查 |
 
 ---
@@ -537,7 +467,7 @@ jobs:
 
 **Step 4: 在代码仓库更新 GitHub Actions 工作流**
 
-编辑代码仓库的 `.github/workflows/deploy.yml`，添加 `repository_dispatch` 触发器:
+如果你仍然需要由 GitHub Actions 接收 `repository_dispatch` 事件，请在现有工作流中新增专用构建文件；本仓库的 `.github/workflows/deploy.yml` 已移除，不再使用 `pages` 分支发布。
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -690,7 +620,7 @@ jobs:
 
 #### GitHub Actions 配置
 
-在代码仓库的 `.github/workflows/deploy.yml` 中添加定时触发:
+如果你需要定时触发额外任务，请新增独立工作流文件，不要恢复旧的 `.github/workflows/deploy.yml`:
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -742,17 +672,14 @@ jobs:
 结合多种方式，确保稳定性:
 
 ```yaml
-# 代码仓库 .github/workflows/deploy.yml
+# 代码仓库 .github/workflows/content-sync.yml
 on:
-  push:
-    branches:
-      - main
-  repository_dispatch:    # 内容更新触发
+  repository_dispatch:
     types:
       - content-updated
-  schedule:              # 兜底方案
+  schedule:
     - cron: '0 2 * * *'
-  workflow_dispatch:     # 手动触发
+  workflow_dispatch:
 ```
 
 **优势**:
