@@ -148,7 +148,8 @@
 
 - **Vercel：** 連接 GitHub 儲存庫到 Vercel
 - **Netlify：** 直接從 GitHub 部署
-- **Cloudflare Pages：** 連接您的儲存庫，並從 `master` 分支建置
+- **GitHub Pages：** 使用包含的 GitHub Actions 工作流
+- **Cloudflare Pages：** 連接您的儲存庫
 
 部署前，請在 `src/config.ts` 中更新 `siteURL`。
 

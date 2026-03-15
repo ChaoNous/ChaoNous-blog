@@ -58,7 +58,6 @@ export const zh_CN: Translation = {
 	[Key.publishedAt]: "发布于",
 	[Key.license]: "许可协议",
 	[Key.anime]: "追番",
-	[Key.movie]: "电影",
 	[Key.diary]: "游戏",
 
 	// 番剧页面
@@ -80,12 +79,6 @@ export const zh_CN: Translation = {
 		"请在 src/config.ts 文件中设置您的 Bilibili vmid",
 	[Key.animeConfigBangumi]:
 		"请在 src/config.ts 文件中设置您的 Bangumi userId",
-
-	// 电影页面
-	[Key.movieTitle]: "我的电影记录",
-	[Key.movieSubtitle]: "记录我的电影之旅",
-	[Key.movieEmpty]: "暂无电影数据",
-	[Key.movieEmptyLocal]: "请在 src/data/movie.ts 文件中添加电影信息",
 
 	// 游戏页面
 	[Key.diarySubtitle]: "记录我的游戏世界",

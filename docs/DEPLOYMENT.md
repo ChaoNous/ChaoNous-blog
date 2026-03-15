@@ -2,11 +2,10 @@
 
 本文档提供 Mizuki 博客在各个平台的部署配置说明。
 
-> 当前仓库实际主分支为 `master`。
-
 ## 📖 目录
 
 - [部署前准备](#-部署前准备)
+- [GitHub Pages 部署](#-github-pages-部署)
 - [Vercel 部署](#-vercel-部署)
 - [Netlify 部署](#-netlify-部署)
 - [Cloudflare Pages 部署](#-cloudflare-pages-部署)
@@ -39,25 +38,95 @@ export default defineConfig({
 
 ---
 
-## 📦 GitHub Pages 部署（已弃用）
+## 📦 GitHub Pages 部署
 
-此仓库已不再使用 GitHub Pages，也不再维护 `pages` 分支发布链路。
+### 自动部署 (推荐)
 
-当前推荐且实际使用的部署方式是 [Cloudflare Pages 部署](#-cloudflare-pages-部署)：
+项目已配置好 GitHub Actions 工作流，推送到 `main` 分支会自动部署。
 
-1. 代码推送到 GitHub 的 `master` 分支
-2. Cloudflare Pages 直接从仓库拉取并构建
-3. 构建输出目录保持为 `dist`
+#### 本地模式 (默认)
 
-如果你看到旧文档或历史提交中提到 `.github/workflows/deploy.yml` 或 `pages` 分支，那是已经移除的历史方案。
+**无需任何配置**，开箱即用：
+
+1. 推送代码到 GitHub
+2. 在仓库设置中启用 GitHub Pages
+   - Settings → Pages
+   - Source: Deploy from a branch
+   - Branch: `pages` / `root`
+3. 等待 Actions 完成部署
+
+#### 内容分离模式
+
+**配置步骤**:
+
+1. **添加仓库 Secrets**:
+   - Settings → Secrets and variables → Actions → New repository secret
+   - 添加 `CONTENT_REPO_URL`: `https://github.com/your-username/Mizuki-Content.git`
+
+2. **修改 `.github/workflows/deploy.yml`**:
+
+取消注释环境变量部分:
+```yaml
+- name: Build site
+  run: pnpm run build
+  env:
+    ENABLE_CONTENT_SYNC: true
+    CONTENT_REPO_URL: ${{ secrets.CONTENT_REPO_URL }}
+    USE_SUBMODULE: true
+```
+
+3. **私有内容仓库配置**:
+
+**同账号私有仓库** (推荐):
+- 无需额外配置
+- 自动使用 `GITHUB_TOKEN` 访问
+
+**跨账号私有仓库 (SSH)**:
+```yaml
+# 添加 SSH 配置步骤
+- name: Setup SSH Key
+  uses: webfactory/ssh-agent@v0.8.0
+  with:
+    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+- name: Checkout
+  uses: actions/checkout@v4
+  with:
+    submodules: true
+```
+
+在 Secrets 中添加:
+- `SSH_PRIVATE_KEY`: SSH 私钥内容
+- `CONTENT_REPO_URL`: `git@github.com:other-user/repo.git`
+
+**跨账号私有仓库 (Token)**:
+```yaml
+- name: Checkout
+  uses: actions/checkout@v4
+  with:
+    submodules: true
+    token: ${{ secrets.PAT_TOKEN }}
+
+- name: Build site
+  run: pnpm run build
+  env:
+    ENABLE_CONTENT_SYNC: true
+    CONTENT_REPO_URL: https://${{ secrets.PAT_TOKEN }}@github.com/other-user/repo.git
+    USE_SUBMODULE: true
+```
+
+在 Secrets 中添加:
+- `PAT_TOKEN`: GitHub Personal Access Token (需要 `repo` 权限)
 
 ### 工作流说明
 
-当前仓库保留的工作流如下:
+项目包含三个工作流:
 
 | 工作流 | 触发条件 | 功能 |
 |--------|---------|------|
-| `CI.yml` | Push/PR 到 master | Astro 检查与构建 |
+| `build.yml` | Push/PR 到 main | CI 测试，检查构建 |
+| `deploy.yml` | Push 到 main | 构建并部署到 pages 分支 |
+| `format.yml` | Push/PR | 代码格式和质量检查 |
 
 ---
 
@@ -348,7 +417,7 @@ fatal: could not read Username for 'https://github.com'
 ## 💡 推荐配置
 
 ### 个人博客
-- **平台**: Cloudflare Pages 或 Vercel
+- **平台**: Vercel 或 GitHub Pages
 - **模式**: 本地模式（最简单）
 - **配置**: 无需环境变量
 
@@ -390,7 +459,7 @@ fatal: could not read Username for 'https://github.com'
 
 | 方案 | 难度 | 推荐度 | 适用平台 |
 |------|------|--------|----------|
-| **Repository Dispatch** | ⭐ 简单 | ⭐⭐⭐⭐⭐ | Cloudflare Pages, Vercel, Netlify |
+| **Repository Dispatch** | ⭐ 简单 | ⭐⭐⭐⭐⭐ | GitHub Pages, Vercel, Netlify, CF Pages |
 | **Webhook + Deploy Hook** | ⭐⭐ 中等 | ⭐⭐⭐⭐ | Vercel, Netlify, CF Pages |
 | **定时构建** | ⭐ 简单 | ⭐⭐⭐ | 所有平台 |
 
@@ -437,7 +506,7 @@ name: Trigger Main Repo Build
 on:
   push:
     branches:
-      - master  # 或你使用的主分支名称
+      - main  # 或你使用的主分支名称
     paths:
       - 'posts/**'
       - 'spec/**'
@@ -466,37 +535,30 @@ jobs:
 - 将 `your-username/Mizuki` 替换为你的代码仓库完整名称
 - 可以根据需要调整 `paths`，只在特定文件变化时触发
 
-**Step 4: 在代码仓库新增 Cloudflare 触发工作流**
+**Step 4: 在代码仓库更新 GitHub Actions 工作流**
 
-当前仓库使用 Cloudflare Pages 直接监听 `master` 分支，因此推荐新增一个专用工作流来接收 `repository_dispatch` 并调用 Cloudflare Deploy Hook。
+编辑代码仓库的 `.github/workflows/deploy.yml`，添加 `repository_dispatch` 触发器:
 
 ```yaml
-name: Trigger Cloudflare Pages
+name: Deploy to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
   repository_dispatch:  # 添加这个触发器
     types:
       - content-updated
-  workflow_dispatch:
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Cloudflare Pages Deploy Hook
-        run: curl -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
+# ...其余配置保持不变
 ```
-
-在代码仓库的 Secrets 中添加：
-- `CLOUDFLARE_DEPLOY_HOOK`: Cloudflare Pages 项目的 Deploy Hook URL
 
 **Step 5: 测试**
 
 1. 在内容仓库编辑一篇文章
-2. 提交并推送到 `master` 分支
+2. 提交并推送到 `main` 分支
 3. 查看内容仓库的 Actions 页面，确认 "Trigger Main Repo Build" 工作流运行
-4. 查看代码仓库的 Actions 页面，确认 `Trigger Cloudflare Pages` 被触发
-5. 查看 Cloudflare Pages 部署历史，确认新构建开始执行
+4. 查看代码仓库的 Actions 页面，确认部署工作流被触发
 
 ---
 
@@ -510,6 +572,7 @@ jobs:
 
 **缺点**:
 - ⚠️ 需要为每个部署平台单独配置
+- ⚠️ 不适用于 GitHub Pages
 
 #### Vercel 配置
 
@@ -519,7 +582,7 @@ jobs:
 2. Settings → Git → Deploy Hooks
 3. 创建新的 Hook:
    - Name: `Content Update`
-   - Git Branch: `master` (或你的主分支)
+   - Git Branch: `main` (或你的主分支)
 4. 点击 **Create Hook**，复制生成的 URL
 
 **Step 2: 在内容仓库配置 Webhook**
@@ -532,7 +595,7 @@ name: Trigger Vercel Deployment
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'posts/**'
       - 'spec/**'
@@ -562,7 +625,7 @@ jobs:
 2. Site settings → Build & deploy → Continuous deployment → Build hooks
 3. 点击 **Add build hook**:
    - Build hook name: `Content Update`
-   - Branch to build: `master`
+   - Branch to build: `main`
 4. 保存并复制生成的 URL
 
 **Step 2: 配置 GitHub Actions**
@@ -575,7 +638,7 @@ name: Trigger Netlify Deployment
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'posts/**'
       - 'spec/**'
@@ -604,7 +667,7 @@ jobs:
 2. Settings → Builds & deployments → Deploy hooks
 3. 创建 Deploy Hook:
    - Hook name: `Content Update`
-   - Branch: `master`
+   - Branch: `main`
 4. 保存并复制 URL
 
 **Step 2: 配置类似于 Vercel/Netlify**
@@ -627,22 +690,20 @@ jobs:
 
 #### GitHub Actions 配置
 
-如果你需要定时触发 Cloudflare Pages 构建，请新增独立工作流文件，不要恢复旧的 `.github/workflows/deploy.yml`:
+在代码仓库的 `.github/workflows/deploy.yml` 中添加定时触发:
 
 ```yaml
-name: Scheduled Cloudflare Pages Trigger
+name: Deploy to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: '0 2 * * *'  # 每天凌晨 2 点 (UTC 时间)
   workflow_dispatch:  # 支持手动触发
 
-jobs:
-  trigger:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Cloudflare Pages Deploy Hook
-        run: curl -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
+# ...其余配置
 ```
 
 **Cron 表达式示例**:
@@ -681,21 +742,17 @@ jobs:
 结合多种方式，确保稳定性:
 
 ```yaml
-# 代码仓库 .github/workflows/content-sync.yml
+# 代码仓库 .github/workflows/deploy.yml
 on:
-  repository_dispatch:
+  push:
+    branches:
+      - main
+  repository_dispatch:    # 内容更新触发
     types:
       - content-updated
-  schedule:
+  schedule:              # 兜底方案
     - cron: '0 2 * * *'
-  workflow_dispatch:
-
-jobs:
-  trigger:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Cloudflare Pages Deploy Hook
-        run: curl -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
+  workflow_dispatch:     # 手动触发
 ```
 
 **优势**:
@@ -737,7 +794,7 @@ jobs:
 
 4. **查看部署平台**:
    - Vercel/Netlify/CF Pages: 查看部署历史
-   - Cloudflare Pages: 查看部署历史或直接访问站点确认更新
+   - GitHub Pages: 访问站点确认更新
 
 ---
 

@@ -146,7 +146,8 @@ Deploy your blog to any static hosting platform:
 
 - **Vercel:** Connect your GitHub repository to Vercel
 - **Netlify:** Deploy directly from GitHub
-- **Cloudflare Pages:** Connect your repository and build from `master`
+- **GitHub Pages:** Use the included GitHub Actions workflow
+- **Cloudflare Pages:** Connect your repository
 
 - **Environment Variable Configuration (Optional):** Refer to `.env.example` for configuration
 

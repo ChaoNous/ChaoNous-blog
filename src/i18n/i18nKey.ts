@@ -56,7 +56,6 @@ enum I18nKey {
 	friendsCopySuccess = "friendsCopySuccess",
 	friendsTags = "friendsTags",
 	anime = "anime",
-	movie = "movie",
 	diary = "diary",
 
 	// 番剧页面
@@ -76,10 +75,6 @@ enum I18nKey {
 	animeEmptyLocal = "animeEmptyLocal",
 	animeConfigBilibili = "animeConfigBilibili",
 	animeConfigBangumi = "animeConfigBangumi",
-	movieTitle = "movieTitle",
-	movieSubtitle = "movieSubtitle",
-	movieEmpty = "movieEmpty",
-	movieEmptyLocal = "movieEmptyLocal",
 
 	// 短文页面
 	diarySubtitle = "diarySubtitle",

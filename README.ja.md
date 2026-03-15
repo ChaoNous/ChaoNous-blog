@@ -145,7 +145,8 @@
 
 - **Vercel：** GitHubリポジトリをVercelに接続
 - **Netlify：** GitHubから直接デプロイ
-- **Cloudflare Pages：** リポジトリを接続し、`master` ブランチからビルド
+- **GitHub Pages：** 付属のGitHub Actionsワークフローを使用
+- **Cloudflare Pages：** リポジトリを接続
 
 デプロイ前に、`src/config.ts`の`siteURL`を更新してください。
 
