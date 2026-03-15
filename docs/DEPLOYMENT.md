@@ -2,6 +2,8 @@
 
 本文档提供 Mizuki 博客在各个平台的部署配置说明。
 
+> 当前仓库实际主分支为 `master`。若文中示例仍出现 `main`，请替换为 `master` 使用。
+
 ## 📖 目录
 
 - [部署前准备](#-部署前准备)
@@ -51,12 +53,11 @@ export default defineConfig({
 
 ### 工作流说明
 
-项目包含三个工作流:
+当前仓库保留的工作流如下:
 
 | 工作流 | 触发条件 | 功能 |
 |--------|---------|------|
-| `build.yml` | Push/PR 到 main | CI 测试，检查构建 |
-| `format.yml` | Push/PR | 代码格式和质量检查 |
+| `CI.yml` | Push/PR 到 master | Astro 检查与构建 |
 
 ---
 
@@ -347,7 +348,7 @@ fatal: could not read Username for 'https://github.com'
 ## 💡 推荐配置
 
 ### 个人博客
-- **平台**: Vercel 或 GitHub Pages
+- **平台**: Cloudflare Pages 或 Vercel
 - **模式**: 本地模式（最简单）
 - **配置**: 无需环境变量
 
@@ -721,7 +722,7 @@ on:
 
 4. **查看部署平台**:
    - Vercel/Netlify/CF Pages: 查看部署历史
-   - GitHub Pages: 访问站点确认更新
+   - Cloudflare Pages: 查看部署历史或直接访问站点确认更新
 
 ---
 

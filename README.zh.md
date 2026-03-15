@@ -148,8 +148,7 @@
 
 - **Vercel：** 连接 GitHub 仓库到 Vercel
 - **Netlify：** 直接从 GitHub 部署
-- **GitHub Pages：** 使用包含的 GitHub Actions 工作流
-- **Cloudflare Pages：** 连接您的仓库
+- **Cloudflare Pages：** 连接您的仓库，并从 `master` 分支构建
 
 - **环境变量配置（可选）：** 可参照 `.env.example` 来配置
 

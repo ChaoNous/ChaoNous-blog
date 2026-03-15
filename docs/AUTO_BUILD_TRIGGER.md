@@ -1,5 +1,7 @@
 # 内容仓库更新自动触发构建 - 快速参考
 
+> 当前代码仓库主分支为 `master`。若你直接复用本文示例，请把 `main` 改成 `master`。
+
 ## 🎯 问题
 
 启用内容分离后,内容仓库 (Mizuki-Content) 更新不会自动触发代码仓库 (Mizuki) 的重新部署。
@@ -52,7 +54,7 @@ repository: your-username/Mizuki  # 改为你的
 on:
   push:
     branches:
-      - main
+      - master
   repository_dispatch:  # 👈 添加这个
     types:
       - content-updated
@@ -61,7 +63,7 @@ on:
 
 ### Step 5: 测试
 
-在内容仓库推送一次:
+在内容仓库推送一次，并确认目标仍是代码仓库的 `master` 分支:
 
 ```bash
 git add .
